@@ -7,3 +7,8 @@ from dotenv import load_dotenv
 load_dotenv(encoding='utf-8')
 
 DSN = os.getenv('DATABASE_URI')
+
+# initial DB
+engine = create_engine(DSN)
+Base = declarative_base()
+Session = sessionmaker(bind=engine)
