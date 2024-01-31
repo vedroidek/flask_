@@ -29,6 +29,9 @@ def create_app(test_config=None):
     
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
+    
+    from app.payments import bp as payments_bp
+    app.register_blueprint(payments_bp, url_prefix='/payments')
 
     # a simple page that says hello
     @app.route('/hello')
