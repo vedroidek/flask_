@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "flask_app_db"
+      POSTGRES_USER: "max"
+      POSTGRES_PASSWORD: "4125"
+    ports:
+      - "5431:5432"
