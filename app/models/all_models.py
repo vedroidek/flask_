@@ -2,7 +2,7 @@ from decimal import Decimal
 import enum
 from datetime import datetime
 from typing import Annotated
-from sqlalchemy import String, func, ForeignKey
+from sqlalchemy import String, func, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import db
 
@@ -58,24 +58,23 @@ class UserRequisites():
     pass
 
 
-# @enum.unique
-# class OrderStatus(enum.Enum):
-#     AWAITING_PAYMENT = 'Awaiting payment'
-#     PAID = 'Paid'
-#     ANNULLED = 'Annulled'
+@enum.unique
+class OrderStatus(enum.Enum):
+    AWAITING_PAYMENT = 'Awaiting payment'
+    PAID = 'Paid'
+    ANNULLED = 'Annulled'
 
 
-# def get_user_limit(id):
-#     limit = None
-#     # here the user's card limit is requested
-#     return limit
+def get_user_limit(id):
+    limit = None
+    # here the user's card limit is requested
+    return limit
     
 
-# class Order(db.Model):
-#     __tablename__ = 'order'
+class Order(db.Model):
+    __tablename__ = 'order'
 
-#     id: Mapped[intpk]
-#     user_id: Mapped[int] = relationship(back_populates='order')
-#     limit: Mapped[Decimal] = mapped_column(get_user_limit(user_id))
-#     requisites: Mapped['User'] = mapped_column(ForeignKey('users.id'))
-#     status: Mapped[OrderStatus] = mapped_column(nullable=False, default=OrderStatus.AWAITING_PAYMENT)
+    id: Mapped[intpk]
+    limit: Mapped[Decimal]
+    requisites: Mapped['User'] = mapped_column(ForeignKey('users.id'))
+    status: Mapped[OrderStatus] = mapped_column(nullable=False, default=OrderStatus.AWAITING_PAYMENT)
