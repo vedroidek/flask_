@@ -55,7 +55,7 @@ header {
     float: left;
 -webkit-box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
-    -webkit-backface-visibility: hidden;
+    -webkit-backface: hidden;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -115,4 +115,22 @@ header {
     opacity: 1;
     font-weight: 300;
   }
-  
+
+.orders-table {
+  width: 50%;
+}
+
+tr:nth-child(even) {
+background-color: #f2f2f2;
+}
+
+th {
+    height: 70px;
+    text-align: left;
+    padding: 15px;
+}
+
+td {
+  text-align: left;
+  padding: 15px;
+}
