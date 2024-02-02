@@ -76,5 +76,6 @@ class Order(db.Model):
 
     id: Mapped[intpk]
     limit: Mapped[Decimal]
-    requisites: Mapped['User'] = mapped_column(ForeignKey('users.id'))
+    user_id: Mapped['User'] = mapped_column(ForeignKey('users.id'))
+    profile_id: Mapped['UserProfile'] = mapped_column(ForeignKey('profile.id'))
     status: Mapped[OrderStatus] = mapped_column(nullable=False, default=OrderStatus.AWAITING_PAYMENT)
