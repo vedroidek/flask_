@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Order table{% endblock title %}
+
+{% block content %}
+    <table class="orders-table">
+        <tr>
+            <th>ID</th>
+            <th>SUM</th>
+            <th>REQUISITES</th>
+            <th>STATUS</th>
+        </tr>
+        {% for i, q in d.items() %}
+        <tr>
+            <td>{{ i }}</td>
+            <td>{{ q[0] }}</td>
+            <td><a href="#">User</a></td>
+            <td>{{ q[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}
