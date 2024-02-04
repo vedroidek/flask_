@@ -1,5 +1,6 @@
 from decimal import Decimal
 import enum
+from typing import List
 from datetime import datetime
 from typing import Annotated
 from sqlalchemy import String, func, ForeignKey, Integer
@@ -9,6 +10,7 @@ from app.extensions import db
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 created_at = Annotated[datetime, mapped_column(server_default=func.now())]
+
 
 
 class BaseUserModel(db.Model):
@@ -27,10 +29,12 @@ class UserStatus(enum.Enum):
 
 
 class User(BaseUserModel):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(String(64), nullable=False, unique=True)
+    profile: Mapped['UserProfile'] = relationship(back_populates='user')
+    order: Mapped[List["Order"]] = relationship()
     
     def __repr__(self):
         return f'User "{self.name}"'
@@ -49,9 +53,10 @@ class UserProfile(BaseUserModel):
     last_name: Mapped[str | None] = mapped_column(String(64))
     locate: Mapped[str | None] = mapped_column(String(256))
     phone_number: Mapped[str | None] = mapped_column(String(12), unique=True)
-    age: Mapped[int | None]
+    age: Mapped[int]
     birthdate: Mapped[datetime | None]
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    user: Mapped['User'] = relationship(back_populates='profile', cascade="all, delete")
     
     
 class UserRequisites():
@@ -76,6 +81,6 @@ class Order(db.Model):
 
     id: Mapped[intpk]
     limit: Mapped[Decimal]
-    user_id: Mapped['User'] = mapped_column(ForeignKey('users.id'))
+    user_id: Mapped['User'] = mapped_column(ForeignKey('user.id'))
     profile_id: Mapped['UserProfile'] = mapped_column(ForeignKey('profile.id'))
-    status: Mapped[OrderStatus] = mapped_column(nullable=False, default=OrderStatus.AWAITING_PAYMENT)
+    status: Mapped['OrderStatus'] = mapped_column(nullable=False, default=OrderStatus.AWAITING_PAYMENT)
