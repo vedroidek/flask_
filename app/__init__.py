@@ -10,7 +10,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://max:4125@127.0.0.1:5431/flask_app_db",
         SQLALCHEMY_TRACK_MODIFICATIONS = False,
-        SQLALCHEMY_ECHO = True,
+        # SQLALCHEMY_ECHO = True,
     )
     
     db.init_app(app=app)
