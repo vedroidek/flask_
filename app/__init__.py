@@ -33,6 +33,9 @@ def create_app(test_config=None):
     
     from app.payments import bp as payments_bp
     app.register_blueprint(payments_bp, url_prefix='/payments')
+    
+    from app.seeds import bp as data_bp
+    app.register_blueprint(data_bp, url_prefix='/sending_data')
 
     # a simple page that says hello
     @app.route('/hello')

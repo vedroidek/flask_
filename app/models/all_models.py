@@ -26,6 +26,7 @@ class UserStatus(enum.Enum):
 class User(BaseUserModel):
     __tablename__ = 'user'
 
+    name: Mapped[str] = mapped_column(String(32))
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(String(64), nullable=False, unique=True)
     profile: Mapped['UserProfile'] = relationship(back_populates='user')

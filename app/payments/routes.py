@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import check_password_hash
 from app.payments import bp
 from app.extensions import db
-from app.models.all_models import User
+from app.models.all_models import User, UserProfile, Order
 
 
 
@@ -15,5 +15,7 @@ def index():
 @bp.route('/orders', methods=['GET', 'POST'])
 def show_orders():
     # page = db.paginate(db.select(User).order_by(User.join_date))
-    d = {num: [num*2, num**2, num+num] for num in range(1, 11)}
-    return render_template('payments/orders.html', d=d)
+    users = User.query.all()
+    statement = db.session.query(User).join(UserProfile).filter(User.id < 10)
+    print(statement)
+    return render_template('payments/orders.html', users=users)
