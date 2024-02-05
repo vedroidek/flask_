@@ -1,24 +1,19 @@
 from decimal import Decimal
 import enum
-from typing import List
+from typing import List, Annotated
 from datetime import datetime
-from typing import Annotated
 from sqlalchemy import String, func, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import db
 
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
-created_at = Annotated[datetime, mapped_column(server_default=func.now())]
-
 
 
 class BaseUserModel(db.Model):
     __abstract__ = True
 
     id: Mapped[intpk]
-    name: Mapped[str] = mapped_column(unique=True, nullable=False)
-    created_at: Mapped[created_at]
 
 
 @enum.unique
@@ -37,13 +32,7 @@ class User(BaseUserModel):
     order: Mapped[List["Order"]] = relationship()
     
     def __repr__(self):
-        return f'User "{self.name}"'
-    
-    @classmethod
-    def get_user_limit(self):
-        limit = None
-        # here the user's card limit is requested
-        return limit
+        return f'User {self.name}'
 
 
 class UserProfile(BaseUserModel):
