@@ -22,6 +22,12 @@ def send_():
             except db.IntegrityError:
                 db.session.rollback()
                 return '<h1>FAIL</h1>'
+        elif answer == 'Delete all':
+            try:
+                db.session.query(User).delete()
+                db.session.commit()
+            except db.IntegrityError:
+                db.session.rollback()
         else:
             return redirect(url_for('home.index'))
     return render_template('seeds/index.html')
