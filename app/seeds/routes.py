@@ -20,6 +20,7 @@ def send_():
                 db.session.commit()
                 flash('Data sent.', category='info')
             except db.IntegrityError:
+                db.session.rollback()
                 return '<h1>FAIL</h1>'
         else:
             return redirect(url_for('home.index'))
