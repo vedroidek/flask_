@@ -18,7 +18,7 @@ def send_():
                                 email=fk.email())
                     db.session.add(user)
                 db.session.commit()
-                flash('Data sent.', category='message')
+                flash('Data sent.', category='info')
             except db.IntegrityError:
                 return '<h1>FAIL</h1>'
         else:

@@ -160,3 +160,10 @@ td {
   margin: 4px 2px;
   cursor: pointer;
 }
+
+.msg_success {
+  background-color: lightgreen;
+  color: darkred;
+  text-align: center;
+  font-size: 20px;
+}

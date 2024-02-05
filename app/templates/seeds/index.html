@@ -3,9 +3,14 @@
 {% block title %}Data generate{% endblock title %}
 
 {% block content %}
-    <h1>Start generating data?</h1>
-    <form method="post"><br>
-        <input type="submit" class="add-data-yes" name="add-data" value="Yes">
-        <input type="submit" class="add-data-no" name="add-data" value="No"><br>
-    </form>
+    <h1>Start generating test data?</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if  messages %}
+            <div class="msg_success">{{ messages[0] }}</div>
+        {% endif %}
+    {% endwith %}
+            <form method="post"><br>
+                <input type="submit" class="add-data-yes" name="add-data" value="Yes">
+                <input type="submit" class="add-data-no" name="add-data" value="No"><br>
+            </form>
 {% endblock content %}
