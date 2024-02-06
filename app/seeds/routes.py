@@ -1,7 +1,8 @@
+from random import uniform, choice
 from flask import request, redirect, url_for, render_template, flash
 from app.seeds import bp
 from app.extensions import db
-from app.models.all_models import User
+from app.models.all_models import User, Order, OrderStatus
 from faker import Faker
 
 
@@ -9,6 +10,7 @@ from faker import Faker
 def send_():
     if request.method == 'POST':
         answer = request.form['add-data']
+        users = []
         if answer == 'Yes':
             fk = Faker()
             try:
@@ -17,7 +19,18 @@ def send_():
                                 password=hash(fk.name()),
                                 email=fk.email())
                     db.session.add(user)
+                    users.append(user)
                 db.session.commit()
+                
+                last_100_id = list(map(lambda x: x.id, users))
+                
+                for _ in range(1000):
+                    order = Order(total_cost=round(uniform(0.0, 10000.0), 3),
+                                  user_id=choice(last_100_id),
+                                  status=choice(dir(OrderStatus)[:3]))
+                    db.session.add(order)
+                db.session.commit()
+                    
                 flash('Data sent.', category='info')
             except db.IntegrityError:
                 db.session.rollback()
@@ -26,6 +39,7 @@ def send_():
             try:
                 db.session.query(User).delete()
                 db.session.commit()
+                flash('All rows removed.', category='info')
             except db.IntegrityError:
                 db.session.rollback()
         else:
