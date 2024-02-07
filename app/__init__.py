@@ -7,9 +7,11 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
-        SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://max:4125@127.0.0.1:5431/flask_app_db",
+        SECRET_KEY=os.getenv('SECRET_KEY'),
+        SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://max:4125@127.0.0.1:5431/flask_app_db',
+        # SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS = False,
+        POSTS_PER_PAGE = 10,
         # SQLALCHEMY_ECHO = True,
     )
     
@@ -36,6 +38,9 @@ def create_app(test_config=None):
     
     from app.seeds import bp as data_bp
     app.register_blueprint(data_bp, url_prefix='/sending_data')
+    
+    from app.auth import bp as auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
 
     # a simple page that says hello
     @app.route('/hello')
