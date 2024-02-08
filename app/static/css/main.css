@@ -1,5 +1,5 @@
 body {
-    background-color: yellow;
+    background-color: lightslategrey;
 }
 
 .greetings {
@@ -15,7 +15,7 @@ header {
     top: 0;
     padding: 15px;
     z-index: 1000;
-    background: yellow;
+    background: yellowgreen;
     -webkit-box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
 }
@@ -117,7 +117,11 @@ header {
   }
 
 .orders-table {
+  background-color: #04AA6D;
   width: 50%;
+  border: 3px solid green;
+  position: relative;
+  left: 50px;
 }
 
 tr:nth-child(even) {
@@ -125,6 +129,7 @@ background-color: #f2f2f2;
 }
 
 th {
+  background-color:green;
     height: 70px;
     text-align: left;
     padding: 15px;

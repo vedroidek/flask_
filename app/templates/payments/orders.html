@@ -3,6 +3,21 @@
 {% block title %}Order table{% endblock title %}
 
 {% block content %}
+    <p>Selected records: {{ all_rows }}</p>
+
+    {% if page > 1 %}
+        <a href="{{ url_for('payments.show_orders', page=page-1) }}">Previous</a>
+    {% endif %}
+        <span>Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+        <a href="{{ url_for('payments.show_orders', page=page+1) }}">Next</a>
+    {% endif %}
+    <form method="post">
+        <label for="quantity">Num of page (between 1 and {{ total_pages }}):</label>
+        <input type="number" name="num_page" id="quantity" min="1" max="{{ total_pages }}">
+    </form>
+    <br>
+
     <table class="orders-table">
         <tr>
             <th>ID</th>
@@ -10,13 +25,14 @@
             <th>REQUISITES</th>
             <th>STATUS</th>
         </tr>
-        {% for i, q in d.items() %}
+        {% for order in items_on_page %}
         <tr>
-            <td>{{ i }}</td>
-            <td>{{ q[0] }}</td>
-            <td><a href="#">User</a></td>
-            <td>{{ q[2] }}</td>
+            <td>{{ order.id }}</td>
+            <td>{{ order.total_cost }}</td>
+            <td><a href="{{ url_for('payments.order_detail') }}?user={{ order.user_id }}">{{ order.user_id }}</a></td>
+            <td>{{ order.status.value }}</td>
         </tr>
         {% endfor %}
     </table>
+
 {% endblock content %}

@@ -24,7 +24,7 @@ def send_():
                 
                 last_100_id = list(map(lambda x: x.id, users))
                 
-                for _ in range(1000):
+                for _ in range(5000):
                     order = Order(total_cost=round(uniform(0.0, 10000.0), 3),
                                   user_id=choice(last_100_id),
                                   status=choice(dir(OrderStatus)[:3]))
@@ -37,6 +37,7 @@ def send_():
                 return '<h1>FAIL</h1>'
         elif answer == 'Delete all':
             try:
+                db.session.query(Order).delete()
                 db.session.query(User).delete()
                 db.session.commit()
                 flash('All rows removed.', category='info')

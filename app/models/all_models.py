@@ -2,7 +2,7 @@ from decimal import Decimal
 import enum
 from typing import List, Annotated
 from datetime import date
-from sqlalchemy import String, func, ForeignKey, Integer
+from sqlalchemy import String, func, ForeignKey, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import db
 
@@ -10,7 +10,7 @@ from app.extensions import db
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
 
-class BaseUserModel(db.Model):
+class BaseModel(db.Model):
     __abstract__ = True
 
     id: Mapped[intpk]
@@ -23,7 +23,7 @@ class UserStatus(enum.Enum):
     is_admin = 'admin'
 
 
-class User(BaseUserModel):
+class User(BaseModel):
     __tablename__ = 'user'
 
     name: Mapped[str] = mapped_column(String(32))
@@ -36,22 +36,33 @@ class User(BaseUserModel):
         return f'User {self.name}'
 
 
-class UserProfile(BaseUserModel):
+class UserProfile(BaseModel):
     __tablename__ = 'profile'
 
     second_name: Mapped[str | None] = mapped_column(String(32))
     last_name: Mapped[str | None] = mapped_column(String(64))
     locate: Mapped[str | None] = mapped_column(String(256))
-    phone_number: Mapped[str | None] = mapped_column(String(12), unique=True)
     age: Mapped[int]
     birthdate: Mapped[date | None]
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     user: Mapped['User'] = relationship(back_populates='profile', cascade="all, delete")
     
     
-class UserRequisites():
-    pass
-
+@enum.unique
+class TypeOfBill(enum.Enum):    
+    CARD = 'Card'
+    PAYMENT_ACCOUNT = 'Payment account'
+    
+    
+class UserBill(BaseModel):
+    __tablename__ = 'bill'
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    type_of_bill: Mapped['TypeOfBill'] = mapped_column(nullable=False, default=TypeOfBill.PAYMENT_ACCOUNT)
+    type_card_or_bill: Mapped[str] = mapped_column(String(64), nullable=False)
+    owner: Mapped['User'] = mapped_column(ForeignKey('user.id'))
+    phone_number: Mapped[str | None] = mapped_column(String(12), unique=True)
+    
 
 @enum.unique
 class OrderStatus(enum.Enum):
@@ -59,13 +70,7 @@ class OrderStatus(enum.Enum):
     PAID = 'Paid'
     ANNULLED = 'Annulled'
 
-
-def get_user_limit(id):
-    limit = None
-    # here the user's card limit is requested
-    return limit
     
-
 class Order(db.Model):
     __tablename__ = 'order'
 
