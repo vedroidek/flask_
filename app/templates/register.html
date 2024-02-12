@@ -13,5 +13,8 @@
     <input type="text" name="email" placeholder="enter email" class="form-control"><br>
     <button class="btn btn-success" type="submit">Add</button>
 </form>
+{% with messages = get_flashed_messages() %}
+    {{ messages[0] }}
+{% endwith %}
 
 {% endblock content %}

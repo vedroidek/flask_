@@ -20,11 +20,10 @@ def register():
         
         password=generate_password_hash(password, method='pbkdf2', salt_length=16)
 
-        if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
-
+        if not all([username, password, email]):
+            flash('All fields are required.')
+            error = 'All fields are required.'
+        
         if error is None:
             try:
                 user = User(name=username,
