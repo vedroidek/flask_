@@ -11,6 +11,7 @@
 * установить docker & docker-compose
 [_docker-compose documentation_](https://docs.docker.com/compose/)
 * создать виртуальное окружение выполнив команду `pip -m venv .venv` ([*pip*](https://pypi.org/project/pip/) должен быть установлен в Вашу систему)
+* активировать окружение `source .venv/bin/activate`
 * из директории содержащей файл docker-compose.yaml выполнить команду `docker-compose up`. При необходимости изменить переменные: _user, password, port_ в *docker-compose.yaml*
 * через оболочку Flask `flask shell` импортировать экземпляр БД и запустить процес создания таблиц: `from app.extensions import db`
 `db.create_all()`
