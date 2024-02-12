@@ -7,34 +7,22 @@ from faker import Faker
 
 
 @bp.route('/', methods=['GET', 'POST'])
-def send_():
+def create_test_data():
     if request.method == 'POST':
         answer = request.form['add-data']
-        users = []
         if answer == 'Yes':
-            fk = Faker()
-            try:
-                for _ in range(100):
-                    user = User(name=fk.name(),
-                                password=hash(fk.name()),
-                                email=fk.email())
-                    db.session.add(user)
-                    users.append(user)
-                db.session.commit()
-                
-                last_100_id = list(map(lambda x: x.id, users))
-                
-                for _ in range(5000):
-                    order = Order(total_cost=round(uniform(0.0, 10000.0), 3),
-                                  user_id=choice(last_100_id),
-                                  status=choice(dir(OrderStatus)[:3]))
-                    db.session.add(order)
-                db.session.commit()
+            users = []
+            session = db.session()
+            with session:
+                try:
+                    create_test_users(session, count=100, users=users)
+                    last_100_id = list(map(lambda x: x.id, users))
                     
-                flash('Data sent.', category='info')
-            except db.IntegrityError:
-                db.session.rollback()
-                return '<h1>FAIL</h1>'
+                    create_test_orders(session, count=5000, ids=last_100_id)
+                    flash('Data send.', category='info')
+                except db.IntegrityError:
+                    db.session.rollback()
+                
         elif answer == 'Delete all':
             try:
                 db.session.query(Order).delete()
@@ -43,6 +31,28 @@ def send_():
                 flash('All rows removed.', category='info')
             except db.IntegrityError:
                 db.session.rollback()
+                
+                return '<h1>FAIL</h1>'
         else:
             return redirect(url_for('home.index'))
     return render_template('seeds/index.html')
+
+
+def create_test_users(session, count: int, users: list):
+    fk = Faker()
+    for _ in range(count):
+        user = User(name=fk.name(),
+                    password=hash(fk.name()),
+                    email=fk.email())
+        session.add(user)
+        users.append(user)
+    session.commit()
+        
+        
+def create_test_orders(session, count: int, ids: list):
+    for _ in range(count):
+        order = Order(total_cost=round(uniform(0.0, 10000.0), 3),
+                        user_id=choice(ids),
+                        status=choice(dir(OrderStatus)[:3]))
+        session.add(order)
+    session.commit()
