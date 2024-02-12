@@ -41,6 +41,9 @@ def create_app(test_config=None):
     
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
+    
+    from app.users import bp as users_bp
+    app.register_blueprint(users_bp, url_prefix='/user')
 
     # a simple page that says hello
     @app.route('/hello')
