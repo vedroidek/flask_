@@ -36,3 +36,5 @@ def order_detail():
     order_id = request.args.get('order')
     order = db.session.get(Order, order_id)
     return render_template('payments/detail.html', order=order)
+
+
