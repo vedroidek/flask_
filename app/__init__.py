@@ -1,5 +1,5 @@
 import os
-from app.extensions import db
+from app.extensions import Base, engine
 from flask import Flask
 
 
@@ -12,10 +12,9 @@ def create_app(test_config=None):
         # SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS = False,
         POSTS_PER_PAGE = 10,
-        # SQLALCHEMY_ECHO = True,
     )
     
-    db.init_app(app=app)
+    Base.metadata.create_all(engine)
      
     if test_config is None:
         # load the instance config, if it exists, when not testing

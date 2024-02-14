@@ -1,7 +1,7 @@
 from flask import render_template, request
-from sqlalchemy import select
+from sqlalchemy import select, func
 from app.payments import bp
-from app.extensions import db
+from app.extensions import Session
 from app.models.all_models import Order
 
 
@@ -20,12 +20,12 @@ def show_orders():
     else:
         page = request.args.get('page', 1, type=int)
     
-    all_rows = Order.query.count()
+    all_rows = Session().query(Order).count()
     per_page: int = 20
-    start: int = (page -1) * per_page
+    start: int = (page - 1) * per_page
     end: int = start + per_page
     total_pages: int = (all_rows + per_page - 1) // per_page
-    items_on_page: int = Order.query.all()[start:end]
+    items_on_page: int = Session().query(Order).all()[start:end]
         
     return render_template('payments/orders.html', items_on_page=items_on_page,
                            total_pages=total_pages, page=page, all_rows=all_rows)
@@ -34,7 +34,8 @@ def show_orders():
 @bp.route('/detail', methods=['GET'])
 def order_detail():
     order_id = request.args.get('order')
-    order = db.session.get(Order, order_id)
+    with Session() as conn:
+        order = conn.get(Order, order_id)
     return render_template('payments/detail.html', order=order)
 
 

@@ -1,7 +1,9 @@
 from flask import render_template, request, redirect, url_for, flash
+from sqlalchemy import insert
+from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash
 from app.main import bp
-from app.extensions import db
+from app.extensions import engine, Session
 from app.models.all_models import User
 
 
@@ -26,12 +28,11 @@ def register():
         
         if error is None:
             try:
-                user = User(name=username,
-                            password=password,
-                            email=email)
-                db.session.add(user)
-                db.session.commit()
-            except db.IntegrityError:
+                user = (insert(User).values(name=username, password=password, email=email))
+                with Session.begin() as conn:
+                    conn.execute(user)
+                    conn.commit()
+            except IntegrityError:
                 error = f"User {username} is already registered."
             else:
                 return redirect(url_for('home.index'))

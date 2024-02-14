@@ -1,7 +1,8 @@
 from random import uniform, choice
 from flask import request, redirect, url_for, render_template, flash
+from sqlalchemy.exc import IntegrityError
 from app.seeds import bp
-from app.extensions import db
+from app.extensions import Session
 from app.models.all_models import User, Order, OrderStatus
 from faker import Faker
 
@@ -12,25 +13,25 @@ def create_test_data():
         answer = request.form['add-data']
         if answer == 'Yes':
             users = []
-            session = db.session()
-            with session:
+            with Session() as session:
                 try:
                     create_test_users(session, count=100, users=users)
                     last_100_id = list(map(lambda x: x.id, users))
                     
                     create_test_orders(session, count=5000, ids=last_100_id)
                     flash('Data send.', category='info')
-                except db.IntegrityError:
-                    db.session.rollback()
+                except IntegrityError:
+                    session.rollback()
                 
         elif answer == 'Delete all':
-            try:
-                db.session.query(Order).delete()
-                db.session.query(User).delete()
-                db.session.commit()
-                flash('All rows removed.', category='info')
-            except db.IntegrityError:
-                db.session.rollback()
+            with Session.begin() as session:
+                try:
+                    session.query(Order).delete()
+                    session.query(User).delete()
+                    session.commit()
+                    flash('All rows removed.', category='info')
+                except IntegrityError:
+                    session.rollback()
                 
                 return '<h1>FAIL</h1>'
         else:

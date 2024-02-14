@@ -1,9 +1,11 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 
-class Base(DeclarativeBase):
-    pass
+DSN = 'postgresql+psycopg2://max:4125@127.0.0.1:5431/flask_app_db'
 
+engine = create_engine(DSN, echo=True, pool_size=5, max_overflow=10)
 
-db = SQLAlchemy(model_class=Base)
+Base = declarative_base()
+
+Session = sessionmaker(bind=engine, autoflush=False)

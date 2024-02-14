@@ -4,13 +4,13 @@ from typing import List, Annotated
 from datetime import date
 from sqlalchemy import String, func, ForeignKey, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.extensions import db
+from app.extensions import Base
 
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
 
-class BaseModel(db.Model):
+class BaseModel(Base):
     __abstract__ = True
 
     id: Mapped[intpk]
@@ -54,7 +54,7 @@ class TypeOfBill(enum.Enum):
     PAYMENT_ACCOUNT = 'Payment account'
     
     
-class UserBill(BaseModel):
+class UserBill(Base):
     __tablename__ = 'bill'
     
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -71,7 +71,7 @@ class OrderStatus(enum.Enum):
     ANNULLED = 'Annulled'
 
     
-class Order(db.Model):
+class Order(Base):
     __tablename__ = 'order'
 
     id: Mapped[int] = mapped_column(primary_key=True)
