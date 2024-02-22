@@ -10,7 +10,7 @@ from faker import Faker
 @bp.route('/', methods=['GET', 'POST'])
 def create_test_data():
     if request.method == 'POST':
-        answer = request.form['add-data']
+        answer = request.form.get('add-data')
         if answer == 'Yes':
             users = []
             with Session() as session:
@@ -32,8 +32,7 @@ def create_test_data():
                     flash('All rows removed.', category='info')
                 except IntegrityError:
                     session.rollback()
-                
-                return '<h1>FAIL</h1>'
+                    return '<h1>FAIL</h1>'
         else:
             return redirect(url_for('home.index'))
     return render_template('seeds/index.html')
@@ -48,8 +47,8 @@ def create_test_users(session, count: int, users: list):
         session.add(user)
         users.append(user)
     session.commit()
-        
-        
+
+
 def create_test_orders(session, count: int, ids: list):
     for _ in range(count):
         order = Order(total_cost=round(uniform(0.0, 10000.0), 3),
