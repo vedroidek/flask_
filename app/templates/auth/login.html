@@ -9,9 +9,15 @@
 {% endwith %}
 
 <form method="post" class="form-control">
-    <input type="text" name="name" placeholder="enter name" class="form-control"><br>
+    {{ form.hidden_tag() }}
+    <p>{{ form.name.label() }}{{ form.name() }} </p>
+    <p>{{ form.email.label() }}{{ form.email() }} </p>
+    <p>{{ form.pswd.label() }}{{ form.pswd() }} </p>
+    <p>{{ form.remember.label() }}{{ form.remember() }} </p>
+    <p>{{ form.submit() }} </p>
+    <!-- <input type="text" name="name" placeholder="enter name" class="form-control"><br>
     <input type="password" name="password" placeholder="enter password" class="form-control"><br>
-    <button class="btn btn-success" type="submit">Login</button>
+    <button class="btn btn-success" type="submit">Login</button> -->
 </form>
 
 {% endblock content %}

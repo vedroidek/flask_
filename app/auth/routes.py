@@ -1,7 +1,8 @@
-import time
 from werkzeug.security import check_password_hash
 from flask import request, make_response, render_template, flash, redirect, url_for, session
 from sqlalchemy import select
+from app.forms import LoginForm
+from app import login_manager
 from app.auth import bp
 from app.extensions import Session
 from app.models.all_models import User
@@ -9,10 +10,8 @@ from app.models.all_models import User
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.cookies.get('logged') == 'yes':
-        return redirect('index')
-    
-    if request.method == 'POST':
+    form = LoginForm()
+    if form.validate_on_submit():
         username: str = request.form.get('name')
         password: str = request.form.get('password')
         if all([username, password]):
@@ -29,8 +28,14 @@ def login():
         else:
             flash('Name and/or password is invalid.', category='error')
             render_template('auth/login.html')
+    return render_template('auth/login.html', form=form)
+    # if request.cookies.get('logged') == 'yes':
+    #     return redirect('index')
     
-    return render_template('auth/login.html')
+    # if request.method == 'POST':
+    #     
+    
+    # return render_template('auth/login.html')
 
 
 @bp.route('/logout', methods=['GET'])

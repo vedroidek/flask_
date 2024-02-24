@@ -1,18 +1,21 @@
 import os
 from app.extensions import Base, engine
 from flask import Flask
+from flask_login import LoginManager
 
+login_manager = LoginManager()
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY=os.getenv('SECRET_KEY'),
-        SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://max:4125@127.0.0.1:5431/flask_app_db',
+        SQLALCHEMY_DATABASE_URI = os.getenv('DSN'),
         # SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS = False,
-        POSTS_PER_PAGE = 10,
     )
+    
+    # login_manager.init_app(app)
     
     Base.metadata.create_all(engine)
      
