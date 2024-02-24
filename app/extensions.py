@@ -1,8 +1,9 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 
-DSN = 'postgresql+psycopg2://max:4125@127.0.0.1:5431/flask_app_db'
+DSN = os.getenv('DSN')
 
 engine = create_engine(DSN, pool_size=5, max_overflow=10, isolation_level="READ COMMITTED")
 
