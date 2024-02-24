@@ -5,7 +5,7 @@ services:
     image: postgres:13.3
     restart: on-failure
     healthcheck:
-      test: ["CMD-SHELL", "psql", "-d", "flask_app_db", "-U", "max"]
+      test: ["CMD", "psql -d flask_app_db -U max"]
       interval: 1m30s
       timeout: 30s
       retries: 5
@@ -14,6 +14,7 @@ services:
       POSTGRES_DB: "flask_app_db"
       POSTGRES_USER: "max"
       POSTGRES_PASSWORD: "4125"
+    hostname: localhost
     ports:
       - "5431:5432"
 
