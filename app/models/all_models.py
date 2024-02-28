@@ -2,9 +2,8 @@ from decimal import Decimal
 import enum
 from typing import List, Annotated
 from datetime import date
-from sqlalchemy import String, func, ForeignKey
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from flask_login import UserMixin
 from app.extensions import Base
 
 
@@ -24,7 +23,7 @@ class UserStatus(enum.Enum):
     is_admin = 'admin'
 
 
-class User(BaseModel, UserMixin):
+class User(BaseModel):
     """ User model. """
     def __init__(self, name, password, email):
         self.name: str = name
@@ -33,7 +32,7 @@ class User(BaseModel, UserMixin):
         
     __tablename__ = 'user'
 
-    name: Mapped[str] = mapped_column(String(32))
+    name: Mapped[str] = mapped_column(String(32), unique=True)
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(String(64), nullable=False, unique=True)
     profile: Mapped['UserProfile'] = relationship(back_populates='user')
@@ -41,6 +40,21 @@ class User(BaseModel, UserMixin):
     
     def __repr__(self):
         return f'User {self.name}'
+    
+    @property
+    def is_authenticated(self):
+        return self.is_active
+    
+    @property
+    def is_active(self):
+        return True
+    
+    @property
+    def is_anonymous(self):
+        return False
+    
+    def get_id(self):
+        return str(self.id)
 
 
 class UserProfile(BaseModel):
