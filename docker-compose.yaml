@@ -3,7 +3,7 @@ version: "3.8"
 services:
   db:
     image: postgres:13.3
-    restart: on-failure
+    restart: always
     healthcheck:
       test: ["CMD", "psql -d flask_app_db -U max"]
       interval: 1m30s
@@ -32,7 +32,7 @@ services:
       - "6379:6379"
     volumes:
       - $PWD/volume/data:/root/redis
-      - $PWD/volume/redis.conf:/usr/local/etc/redis/redis.conf
+      # - $PWD/volume/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       - REDIS_PASSWORD=4125
       - REDIS_PORT=6379
