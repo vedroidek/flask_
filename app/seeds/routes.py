@@ -1,6 +1,7 @@
 from random import uniform, choice
 from flask import request, redirect, url_for, render_template, flash
 from sqlalchemy.exc import IntegrityError
+from flask_login import login_required
 from app.seeds import bp
 from app.extensions import Session
 from app.models.all_models import User, Order, OrderStatus
@@ -8,6 +9,7 @@ from faker import Faker
 
 
 @bp.route('/', methods=['GET', 'POST'])
+@login_required
 def create_test_data():
     if request.method == 'POST':
         answer = request.form.get('add-data')

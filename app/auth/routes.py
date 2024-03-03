@@ -1,8 +1,8 @@
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask import request, make_response, render_template, flash, redirect, url_for, session
+from flask import request, render_template, flash, redirect, url_for
 from sqlalchemy import select, insert
 from sqlalchemy.exc import IntegrityError
-from app.redis_cli import redis_client as r
+from flask_login import login_user, logout_user, login_required
 from app.forms import LoginForm
 from app.auth import bp
 from app.extensions import Session
@@ -25,14 +25,14 @@ def register():
         
         if error is None:
             try:
-                user = (insert(User).values(name=username, password=password, email=email))
-                with Session.begin() as conn:
+                user = insert(User).values(name=username, password=password, email=email)
+                with Session() as conn:
                     conn.execute(user)
                     conn.commit()
             except IntegrityError:
                 error = f"User {username} is already registered."
             else:
-                return redirect(url_for('auth.index'))
+                return redirect(url_for('home.index'))
 
         flash(error)
 
@@ -43,24 +43,22 @@ def register():
 def login():
     """ View for user login. """
     form = LoginForm()
-    username: str = request.form.get('name')
-    password: str = request.form.get('password')
     if form.validate_on_submit():
         with Session() as conn:
-            user: str = conn.scalar(select(User).filter(User.name == username))
+            user = conn.scalar(select(User).filter(User.name == form.name.data))
             
-        password = check_password_hash(user.password, password)
-        
-        r.set(f'is_logged:{user.name}', 'yes', ex=3600)
+        if check_password_hash(user.password, form.pswd.data):
+            login_user(user, remember=True)
+            
         return redirect(url_for('home.index'))
         
     else:
         flash('Name and/or password is invalid.', category='error')
-        render_template('auth/login.html')
+        render_template('auth/login.html', form=form)
     return render_template('auth/login.html', form=form)
 
 
 @bp.route('/logout', methods=['GET'])
 def logout():
-    r.set(name=f'is_logged:{User.id}', value='no')
+    logout_user()
     return redirect(url_for('home.index'))

@@ -25,18 +25,15 @@
             
             
             <div class="col-md-3 text-end">
-            {% if  request.cookies.get('logged') == 'yes' %}
                 <a href="{{ url_for('auth.logout') }}">
                     <button type="button" class="btn btn-outline-primary me-2">Log Out</button>
                 </a>
-            {% else %}
                 <a href="{{ url_for('auth.login') }}">
                     <button type="button" class="btn btn-outline-primary me-2">Log In</button>
                 </a>
-                <a href="{{ url_for('home.register') }}">
+                <a href="{{ url_for('auth.register') }}">
                     <button type="button" class="btn btn-primary">Register</button>
                 </a>
-            {% endif %}
             </div>
             
         </header>
