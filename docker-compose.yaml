@@ -18,24 +18,5 @@ services:
     ports:
       - "5431:5432"
 
-  redis:
-    depends_on:
-      - db
-    image: redis:7.2
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 100s
-    ports:
-      - "6379:6379"
-    volumes:
-      - $PWD/volume/data:/root/redis
-      # - $PWD/volume/redis.conf:/usr/local/etc/redis/redis.conf
-    environment:
-      - REDIS_PASSWORD=4125
-      - REDIS_PORT=6379
-      - REDIS_DATABASE=1
     
     

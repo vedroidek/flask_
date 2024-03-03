@@ -5,7 +5,7 @@ from datetime import date
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.extensions import Base
-
+from flask_login import UserMixin
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
@@ -23,7 +23,7 @@ class UserStatus(enum.Enum):
     is_admin = 'admin'
 
 
-class User(BaseModel):
+class User(UserMixin, BaseModel):
     """ User model. """
     def __init__(self, name, password, email):
         self.name: str = name
@@ -41,20 +41,8 @@ class User(BaseModel):
     def __repr__(self):
         return f'User {self.name}'
     
-    @property
-    def is_authenticated(self):
-        return self.is_active
-    
-    @property
-    def is_active(self):
-        return True
-    
-    @property
-    def is_anonymous(self):
-        return False
-    
     def get_id(self):
-        return str(self.id)
+        return self.id
 
 
 class UserProfile(BaseModel):
