@@ -1,10 +1,11 @@
 from typing import Type
 from http import HTTPStatus as status
-from flask import render_template, request, g
+from flask import render_template, request, jsonify
 from flask.views import MethodView
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash
+from flask_login import login_required
 from app.extensions import Session
 from app.users import bp
 from app.models.all_models import User
@@ -21,13 +22,11 @@ def get_user(id: int, orm_model: Type[User], session=Session):
 
 class UserView(MethodView):
     
-    @bp.route('/<int:user_id>')
     def get(self, user_id):
         with Session() as session:
             user = session.get(User, user_id)
-            return user
-    
-    @bp.route('/')
+            return jsonify(user_id=user.id, user_name=user.name, user_email=user.email), 404
+
     def post(self, name: str=None, email: str=None, password: str=None):
         email_exists = select(User.email).filter(email=email)
         if email_exists:
@@ -42,8 +41,7 @@ class UserView(MethodView):
                 session.rollback()
                 return status.CONFLICT
             return status.OK
-    
-    @bp.route('/<int:user_id>')
+        
     def patch(self, user_id: int, name: str=None, email: str=None, password: str=None):
         u = get_user(user_id, User, Session)
         if not u:
@@ -59,7 +57,6 @@ class UserView(MethodView):
                 return status.CONFLICT
             return status.OK
     
-    @bp.route('/<int:user_id>')
     def delete(self, user_id: int):
         user = get_user(user_id, User, Session)
         if not user:
@@ -74,13 +71,6 @@ class UserView(MethodView):
             return status.OK
 
 
-@bp.route('/', methods=['GET'])
-@bp.route('/<int:user_id>', methods=['GET', 'POST'])
-def index(user_id: int = None):
-    user = get_user(user_id, User, Session)
-    return render_template('users/index.html')
-
-
 @bp.route('/user_detail', methods=['GET'])
 def user_detail():
     user_id = request.args.get('user_id')
@@ -88,3 +78,12 @@ def user_detail():
     if request.cookies.get('logged'):
         log = request.cookies.get('logged')
     return render_template('users/user_detail.html', user=user)
+
+
+bp.add_url_rule('/', view_func=UserView.as_view(
+    'user', init_every_request=False
+    ), methods=['POST'])
+
+bp.add_url_rule('/<int:user_id>', view_func=UserView.as_view(
+    'users', 
+    ), methods=['GET', 'PATCH', 'DELETE'])
