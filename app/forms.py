@@ -13,7 +13,6 @@ class LoginForm(FlaskForm):
     pswd = PasswordField('Password', [InputRequired(), DataRequired(), Length(min=6, max=128)],
                          render_kw={'placeholder': 'password'})
     remember = BooleanField('Remember me', default=False)
-    submit = SubmitField('LogIn')
     
     def validate_username(self, name):
         existing_username = select(User).filter_by(username=name.data)
@@ -31,7 +30,6 @@ class RegisterForm(FlaskForm):
                          render_kw={'placeholder': 'password'})
     pswd_ = PasswordField('Password', [InputRequired(), DataRequired(), Length(min=6, max=128)],
                          render_kw={'placeholder': 're-entry password'})
-    submit = SubmitField('Register')
     
     def check_pswds(self):
         return True if self.pswd.data == self.pswd_.data else False

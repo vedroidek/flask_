@@ -7,16 +7,14 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/register.css') }}">
 <h1 class="label-add">Add user</h1>
-
     <form method="post" class="register-form-control">
         {{ form.hidden_tag() }}
         <p class="fields">{{ form.name.label() }}{{ form.name() }}</p>
         <p class="fields">{{ form.email.label() }}{{ form.email() }}</p>
         <p class="fields">{{ form.pswd.label() }}{{ form.pswd() }}</p>
         <p class="fields">{{ form.pswd_.label() }}{{ form.pswd_() }}</p>
-        <button class='register-button'>{{ form.submit() }}</button>
+        <button class='register-button'>Register</button>
     </form>
-</link>
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
