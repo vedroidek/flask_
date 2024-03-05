@@ -5,18 +5,20 @@
 {% block content %}
 
 {% with messages = get_flashed_messages() %}
-    {{ messages[0] }}
+{% if messages %}
+<div class="login-form-control">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <p class="fields">{{ form.name.label() }}{{ form.name() }} </p>
+        <p class="fields">{{ form.pswd.label() }}{{ form.pswd() }} </p>
+        <p class="flash-msg">{{ messages[0] }}</p>
+        <p class="rem-me">{{ form.remember.label() }}{{ form.remember() }}</p><br>
+        <button class="login-button" title="Enter">Log In</button>
+    </form>
+</div>
+{% endif %}
 {% endwith %}
-
-<form method="post" class="form-control">
-    {{ form.hidden_tag() }}
-    <p>{{ form.name.label() }}{{ form.name() }} </p>
-    <p>{{ form.pswd.label() }}{{ form.pswd() }} </p>
-    <p>{{ form.remember.label() }}{{ form.remember() }} </p>
-    <p>{{ form.submit() }} </p>
-    <!-- <input type="text" name="name" placeholder="enter name" class="form-control"><br>
-    <input type="password" name="password" placeholder="enter password" class="form-control"><br>
-    <button class="btn btn-success" type="submit">Login</button> -->
-</form>
+</p>
 
 {% endblock content %}
