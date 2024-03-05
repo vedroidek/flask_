@@ -1,0 +1,38 @@
+.register-form-control {
+    align-self: center;
+    height: 50%;
+    width: 40%;
+    border-style: ridge;
+    border-radius: 15px;
+    border-width: 3px;
+    background-color: cadetblue;
+    margin: 80px;
+    margin-top: 40px;
+    padding: 40px;
+    
+}
+
+.label-add {
+    -webkit-text-shadow: 5px 0px 4px rgba(0, 0, 0, 0.5);
+    -moz-text-shadow: 5px 0px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 5px 0px 4px rgba(0, 0, 0, 0.5);
+    color: darkorange;
+    margin-left: 10%;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+p.fields {
+    border-left: 6px solid yellowgreen;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-direction: column;
+    background: rgb(7,46,0);
+    background: linear-gradient(270deg, rgba(7,46,0,1) 0%, rgba(57,255,71,0.4976190305223652) 48%); 
+}
+
+p.register-button {
+    color: darkred;
+    text-align: center;
+}

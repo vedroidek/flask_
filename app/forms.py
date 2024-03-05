@@ -23,10 +23,15 @@ class LoginForm(FlaskForm):
     
 class RegisterForm(FlaskForm):
     
-    name = StringField('Full Name: ', validators=[InputRequired(), DataRequired(), Length(min=3, max=64)],
+    name = StringField('Name', validators=[InputRequired(), DataRequired(), Length(min=3, max=64)],
                        render_kw={'placeholder': 'username'})
-    email = StringField('Email: ', validators=[InputRequired(), Email()],
-                        render_kw={'placeholder': 'email'})
+    email = StringField('Email', validators=[InputRequired(), Email()],
+                        render_kw={'placeholder': 'email', 'title': 'enter email'})
     pswd = PasswordField('Password', [InputRequired(), DataRequired(), Length(min=6, max=128)],
                          render_kw={'placeholder': 'password'})
+    pswd_ = PasswordField('Password', [InputRequired(), DataRequired(), Length(min=6, max=128)],
+                         render_kw={'placeholder': 're-entry password'})
     submit = SubmitField('Register')
+    
+    def check_pswds(self):
+        return True if self.pswd.data == self.pswd_.data else False

@@ -1,20 +1,27 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Register new user.
+    Register new user
 {% endblock title %}
 
 {% block content %}
-<h1>Add user</h1>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/register.css') }}">
+<h1 class="label-add">Add user</h1>
 
-<form method="post" class="form-control">
-    <input type="text" name="name" placeholder="enter name" class="form-control"><br>
-    <input type="password" name="password" placeholder="enter password" class="form-control"><br>
-    <input type="text" name="email" placeholder="enter email" class="form-control"><br>
-    <button class="btn btn-success" type="submit">Add</button>
-</form>
+    <form method="post" class="register-form-control">
+        {{ form.hidden_tag() }}
+        <p class="fields">{{ form.name.label() }}{{ form.name() }}</p>
+        <p class="fields">{{ form.email.label() }}{{ form.email() }}</p>
+        <p class="fields">{{ form.pswd.label() }}{{ form.pswd() }}</p>
+        <p class="fields">{{ form.pswd_.label() }}{{ form.pswd_() }}</p>
+        <button class='register-button'>{{ form.submit() }}</button>
+    </form>
+</link>
+
 {% with messages = get_flashed_messages() %}
-    {{ messages[0] }}
+    {% if messages %}
+        {{ messages[0] }}
+    {% endif %}
 {% endwith %}
 
 {% endblock content %}
