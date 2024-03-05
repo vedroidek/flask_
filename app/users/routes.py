@@ -21,6 +21,7 @@ def get_user(id: int, orm_model: Type[User], session=Session):
 
 
 class UserView(MethodView):
+    decorators = [login_required]
     
     def get(self, user_id):
         with Session() as session:
@@ -85,5 +86,5 @@ bp.add_url_rule('/', view_func=UserView.as_view(
     ), methods=['POST'])
 
 bp.add_url_rule('/<int:user_id>', view_func=UserView.as_view(
-    'users', 
+    'users',
     ), methods=['GET', 'PATCH', 'DELETE'])
