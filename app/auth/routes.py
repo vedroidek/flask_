@@ -19,7 +19,7 @@ def register():
         password = form.pswd.data
         email = form.email.data
         
-        is_exsist_email = Session().select(User).filter(User.email == email)
+        is_exsist_email = Session().scalar(select(User).filter(User.email == email))
         if is_exsist_email:
             error = 'This email already exsists.'
         
@@ -34,7 +34,7 @@ def register():
                     error = f"User {username} is already registered."
                     conn.rollback()
         else:
-            return redirect(url_for('home.index'))
+            return redirect(url_for('auth.login'))
 
         flash(error)
 
@@ -45,6 +45,7 @@ def register():
 def login():
     """ View for user login. """
     form = LoginForm()
+    error = None
     if form.validate_on_submit():
         with Session() as conn:
             user = conn.scalar(select(User).filter(User.name == form.name.data))
@@ -60,7 +61,8 @@ def login():
         return response
         
     else:
-        flash('Name and/or password is invalid.', category='error')
+        error = 'Name and/or password is invalid.'
+        flash(error, category='error')
         render_template('auth/login.html', form=form)
     return render_template('auth/login.html', form=form)
 

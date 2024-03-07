@@ -2,7 +2,6 @@ import os
 from app.extensions import Base, engine, Session
 from flask import Flask
 from flask_login import LoginManager
-from sqlalchemy import select
 
 
 def create_app(test_config=None):
@@ -27,7 +26,7 @@ def create_app(test_config=None):
     def load_user(user_id):
         with Session() as conn:
             user = conn.get(User, user_id)
-        return
+        return user
      
     if test_config is None:
         # load the instance config, if it exists, when not testing
