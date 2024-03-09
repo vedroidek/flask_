@@ -52,7 +52,7 @@ def login():
             
         if user and check_password_hash(user.password, form.pswd.data):
             login_user(user=user, remember=form.remember.data, force=True)
-        
+
         if previous_page := request.args.get('next'):
             response = make_response(redirect(previous_page))
         else:
