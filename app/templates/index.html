@@ -4,4 +4,11 @@
 
 {% block content %}
 Main page
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+<div id="date">
+    {% with name = current_user.name %}
+    <button type="button" name="{{ name }}" onclick="show_date(name)" id="time"><strong>Show my name.</strong></button>
+    {% endwith %}
+</div>
 {% endblock content %}
