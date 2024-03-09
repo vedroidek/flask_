@@ -18,13 +18,18 @@
     
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="{{ url_for('home.index') }}" class="nav-link px-2">Home</a></li>
+
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('user.user_detail') }}" class="nav-link px-2">Profile</a></li>
                 <li><a href="{{ url_for('payments.show_orders') }}" class="nav-link px-2">Orders</a></li>
                 <li><a href="{{ url_for('sending_data.create_test_data') }}" class="nav-link px-2">Add data</a></li>
-                
+                {% endif %}
+
             </ul>
-            
+
             <div class="col-md-3 text-end">
                 {% if current_user.is_authenticated %}
+                <div class="user">{{ current_user.name.capitalize() }}</div>
                 <a href="{{ url_for('auth.logout') }}">
                     <button type="button" class="btn btn-outline-primary me-2">Log Out</button>
                 </a>
