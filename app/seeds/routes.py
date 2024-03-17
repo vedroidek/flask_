@@ -3,7 +3,7 @@ from flask import request, redirect, url_for, render_template, flash
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_required
 from app.seeds import bp
-from app.extensions import Session
+from app.db import Session
 from app.models.all_models import User, Order, OrderStatus
 from faker import Faker
 

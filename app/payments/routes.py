@@ -1,7 +1,7 @@
 from flask import render_template, request
 from sqlalchemy import select, func
 from app.payments import bp
-from app.extensions import Session
+from app.db import Session
 from app.models.all_models import Order
 
 

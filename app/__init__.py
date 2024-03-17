@@ -1,7 +1,8 @@
 import os
-from app.extensions import Base, engine, Session
 from flask import Flask
 from flask_login import LoginManager
+from app.db import engine, Session
+from app.models.all_models import Base
 
 
 def create_app(test_config=None):
@@ -10,7 +11,6 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY=os.getenv('SECRET_KEY'),
         SQLALCHEMY_DATABASE_URI = os.getenv('DSN'),
-        # SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS = False,
     )
     

@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash
 from flask_login import login_required
-from app.extensions import Session
+from app.db import Session
 from app.users import bp
 from app.models.all_models import User
 

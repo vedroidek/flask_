@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms.validators import ValidationError
 from sqlalchemy import select
 from app.models.all_models import User
-from wtforms import StringField, SubmitField, BooleanField, PasswordField
+from wtforms import StringField, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Email, Length, InputRequired
 
 

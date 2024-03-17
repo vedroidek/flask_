@@ -3,10 +3,10 @@ import enum
 from typing import List, Annotated
 from datetime import date
 from sqlalchemy import String, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.extensions import Base
+from sqlalchemy.orm import Mapped, mapped_column, relationship, declarative_base
 from flask_login import UserMixin
 
+Base = declarative_base()
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
 
